@@ -1,0 +1,10 @@
+stock
+| where todatetime(['time']) > ago(5m)
+| where todouble(bidPrice) > 0 and todouble(askPrice) > 0
+| extend bid = todouble(bidPrice), ask = todouble(askPrice)
+| extend spread = ask - bid, midpoint = (ask + bid) / 2.0
+| extend spreadPct = 100.0 * spread / midpoint
+| summarize arg_max(todatetime(['time']), *) by symbol
+| project symbol, sector, bid, ask, spread, spreadPct,
+          bidSize = tolong(bidSize), askSize = tolong(askSize)
+| order by spreadPct desc

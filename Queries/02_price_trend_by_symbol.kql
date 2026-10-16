@@ -1,0 +1,7 @@
+stock
+| where todatetime(['time']) > ago(5m)
+| where todouble(lastSalePrice) > 0
+| summarize price = avg(todouble(lastSalePrice))
+    by symbol, bin(todatetime(['time']), 10s)
+| project ['time'], symbol, price
+| order by ['time'] asc

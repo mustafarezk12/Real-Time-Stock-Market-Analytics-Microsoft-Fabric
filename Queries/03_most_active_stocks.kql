@@ -1,0 +1,6 @@
+stock
+| where todatetime(['time']) > ago(5m)
+| summarize arg_max(todatetime(['time']), *) by symbol
+| project symbol, sector, volume = tolong(volume),
+          lastSalePrice = todouble(lastSalePrice)
+| top 10 by volume desc

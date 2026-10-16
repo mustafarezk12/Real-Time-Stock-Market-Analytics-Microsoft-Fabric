@@ -1,0 +1,8 @@
+stock
+| where todatetime(['time']) > ago(5m)
+| summarize
+    totalEvents = count(),
+    missingBid = countif(todouble(bidPrice) <= 0),
+    missingAsk = countif(todouble(askPrice) <= 0),
+    invalidSalePrice = countif(todouble(lastSalePrice) <= 0),
+    missingSymbol = countif(isempty(symbol))

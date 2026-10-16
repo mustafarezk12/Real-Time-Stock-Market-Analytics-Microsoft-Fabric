@@ -1,0 +1,9 @@
+stock
+| where todatetime(['time']) > ago(5m)
+| summarize arg_max(todatetime(['time']), *) by symbol
+| summarize
+    stockCount = dcount(symbol),
+    avgVolume = avg(todouble(volume)),
+    avgMarketPercent = avg(todouble(marketPercent))
+    by sector
+| order by stockCount desc

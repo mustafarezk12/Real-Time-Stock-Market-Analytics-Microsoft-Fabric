@@ -1,0 +1,8 @@
+stock
+| where todatetime(['time']) > ago(5m)
+| summarize arg_max(todatetime(['time']), *) by symbol
+| summarize
+    activeStocks = dcount(symbol),
+    totalReportedVolume = sum(tolong(volume)),
+    averageSalePrice = round(avg(todouble(lastSalePrice)), 2),
+    validQuotes = countif(todouble(bidPrice) > 0 and todouble(askPrice) > 0)
